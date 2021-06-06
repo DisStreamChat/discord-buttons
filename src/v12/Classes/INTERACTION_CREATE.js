@@ -43,6 +43,17 @@ class ButtonEvent {
         this.deferred = false;
     }
 
+    async ping(ephemeral = false) {
+        await this.client.api.interactions(this.discordID, this.token).callback.post({
+            data: {
+                type: 1,
+                data: {
+                    flags: ephemeral ? 1 << 6 : null,
+                },
+            },
+        });
+    }
+    
     async defer(ephemeral = false) {
         if (this.deferred === true || this.replied === true) throw new Error('BUTTON_ALREADY_REPLIED: This button already has a reply');
         await this.client.api.interactions(this.discordID, this.token).callback.post({
